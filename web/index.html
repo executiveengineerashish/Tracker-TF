@@ -30,9 +30,10 @@ tr.t td{background:#f1e4d8;color:#2b1d14;font-weight:800}.hot{background:#ffe3a8
 .row{display:grid;grid-template-columns:80px 1fr 150px;gap:10px;align-items:center;margin:10px 0;font-size:13px}
 .wsg{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
 .hide{display:none}
+#lg:not(.hide){display:grid}
 @media(max-width:760px){body{flex-direction:column-reverse}aside{width:100%;height:auto;position:fixed;bottom:0;left:0;flex-direction:row;justify-content:space-around;z-index:9;padding:6px;border-top:1px solid var(--ln)}.logo{display:none}main{padding:12px 12px 80px}.row{grid-template-columns:60px 1fr}.row span:last-child{grid-column:1/3}}
 </style></head><body>
-<div id="lg" class="hide" style="position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;z-index:20"><form id="lf" class="c" style="width:min(340px,90vw);display:grid;gap:10px"><div class="logo" style="margin:0"><i>TF</i>TF-Tracker</div><input id="em" type="email" placeholder="Email" required style="padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--card);color:var(--ink)"><input id="pw" type="password" placeholder="Password" required style="padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--card);color:var(--ink)"><button>Sign in</button><small id="le" style="color:#c62828"></small></form></div>
+<div id="lg" class="hide" style="position:fixed;inset:0;background:var(--bg);place-items:center;z-index:20"><form id="lf" class="c" style="width:min(340px,90vw);display:grid;gap:10px"><div class="logo" style="margin:0"><i>TF</i>TF-Tracker</div><input id="em" type="email" placeholder="Email" required style="padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--card);color:var(--ink)"><input id="pw" type="password" placeholder="Password" required style="padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--card);color:var(--ink)"><button>Sign in</button><small id="le" style="color:#c62828"></small></form></div>
 <aside><div class="logo"><i>TF</i>TF-Tracker</div>
 <a id="n1" class="on">📊 Summary</a><a id="n2">📈 Dashboard</a><a href="records.html">🗂 Data sheet</a><a href="records.html">🚨 Emergency</a><a id="lo" style="margin-top:auto;color:var(--mut)">Logout</a></aside>
 <main>
@@ -89,7 +90,7 @@ function render(R,TI,TR,f,t){
  $("#v2").innerHTML=v+"</div>"}
 $("#go").onclick=load;
 [["n1","v1","v2"],["n2","v2","v1"]].forEach(([a,s,h])=>$("#"+a).onclick=()=>{$("#"+s).classList.remove("hide");$("#"+h).classList.add("hide");$("#n1").classList.toggle("on",a=="n1");$("#n2").classList.toggle("on",a=="n2")});
-$("#lf").onsubmit=async e=>{e.preventDefault();const{error}=await sb.auth.signInWithPassword({email:$("#em").value,password:$("#pw").value});if(error)$("#le").textContent=error.message;else load()};
+$("#lf").onsubmit=async e=>{e.preventDefault();$("#le").textContent="";const{error}=await sb.auth.signInWithPassword({email:$("#em").value,password:$("#pw").value});if(error)$("#le").textContent=error.message;else load()};
 $("#lo").onclick=async()=>{await sb.auth.signOut();location.reload()};
 load();
 </script></body></html>
