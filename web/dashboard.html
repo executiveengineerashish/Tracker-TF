@@ -1,0 +1,92 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TF-Tracker</title>
+<style>
+:root{--bg:#faf6f1;--card:#fff;--ink:#2b1d14;--mut:#7a6a5e;--ac:#c2410c;--nav:#0f2744;--ln:#e7dccf;--g:#1faa7a;--o:#f59e3b;--y:#e0b100;--p:#7c4dcc}
+@media(prefers-color-scheme:dark){:root{--bg:#14110f;--card:#1f1a17;--ink:#f3ebe3;--mut:#a89888;--ln:#3a312b}}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial;background:var(--bg);color:var(--ink);display:flex;min-height:100vh}
+aside{width:210px;background:var(--card);border-right:1px solid var(--ln);padding:16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;margin-bottom:14px}.logo i{width:38px;height:38px;border:2px solid var(--ac);border-radius:50%;display:grid;place-items:center;font-style:normal;color:var(--ac);font-size:13px}
+aside a{padding:10px 12px;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:600;cursor:pointer}aside a.on{background:#f1e4d8;color:var(--ac)}
+@media(prefers-color-scheme:dark){aside a.on{background:#3a2a20}}
+main{flex:1;padding:18px;min-width:0}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:end;justify-content:space-between;margin-bottom:14px}
+h1{margin:0;font-size:24px}small{color:var(--mut)}
+.f{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.f label{font-size:11px;color:var(--mut);display:grid;gap:2px}
+input[type=date]{padding:7px;border:1px solid var(--ln);border-radius:8px;background:var(--card);color:var(--ink)}
+button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-weight:700;cursor:pointer}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.k{border-radius:14px;padding:14px;background:#f2e8de;color:#2b1d14}.k b{display:block;font-size:30px}.k span{font-size:12px}
+.k.g{background:#dff5ec}.k.b{background:#e0e9fb}.k.o{background:#ffe3d6}.k.y{background:#fdf1c4}.k.p{background:#ece4fb}
+.c{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:14px}
+.c h2{margin:0 0 10px;font-size:13px;letter-spacing:.05em;color:var(--ac);text-transform:uppercase}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border:1px solid var(--ln);padding:5px 8px;text-align:center}th{background:#f1e4d8;color:#2b1d14;font-size:11px}td:first-child,th:first-child{text-align:left;font-weight:700}
+tr.t td{background:#f1e4d8;color:#2b1d14;font-weight:800}.hot{background:#ffe3a8;color:#2b1d14}
+.hero{border-radius:18px;padding:20px;color:#fff;background:linear-gradient(120deg,#16296e,#2b4bd0 60%,#1fa5a0);display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;margin-bottom:14px}
+.hero h1{font-size:22px}.rings{display:flex;gap:14px}
+.ring{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),rgba(255,255,255,.25) 0)}
+.ring div{width:64px;height:64px;border-radius:50%;background:#1d3a9a;display:grid;place-items:center;font-weight:800;font-size:14px;text-align:center}
+.bar{display:flex;height:16px;border-radius:9px;overflow:hidden;background:#e5e1dc;margin:4px 0}.bar i{display:block}
+.row{display:grid;grid-template-columns:80px 1fr 150px;gap:10px;align-items:center;margin:10px 0;font-size:13px}
+.wsg{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.hide{display:none}
+@media(max-width:760px){body{flex-direction:column-reverse}aside{width:100%;height:auto;position:fixed;bottom:0;left:0;flex-direction:row;justify-content:space-around;z-index:9;padding:6px;border-top:1px solid var(--ln)}.logo{display:none}main{padding:12px 12px 80px}.row{grid-template-columns:60px 1fr}.row span:last-child{grid-column:1/3}}
+</style></head><body>
+<aside><div class="logo"><i>TF</i>TF-Tracker</div>
+<a id="n1" class="on">📊 Summary</a><a id="n2">📈 Dashboard</a><a href="index.html">🗂 Data sheet</a><a href="index.html">🚨 Emergency</a></aside>
+<main>
+<div class="top"><div><h1>Transformer Summary</h1><small id="sub"></small></div>
+<div class="f"><label>From<input type="date" id="df"></label><label>To<input type="date" id="dt"></label><button id="go">Show</button></div></div>
+<div id="v1"><div class="kp" id="kp"></div>
+<div class="c"><h2>Workshop wise summary</h2><div class="tw"><table id="t1"></table></div></div>
+<div class="c"><h2>Pending for issue – age wise</h2><div class="tw"><table id="t2"></table></div></div>
+<div class="c"><h2>Capacity wise summary</h2><div class="tw"><table id="t3"></table></div></div></div>
+<div id="v2" class="hide"></div>
+<p id="msg"></p>
+</main>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const C=window.APP_CONFIG,sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY),$=s=>document.querySelector(s);
+const WS=["AZAMGARH","BALLIA","MAU"],CAP=[10,16,25,63,100,160,250,400,630];
+const iso=d=>d.toISOString().slice(0,10),fd=s=>s.split("-").reverse().join(".");
+const n=(a,f)=>a.filter(f).length,S=a=>a.reduce((x,y)=>x+y,0);
+const tb=(h,rows,tot)=>h+rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")+(tot?`<tr class="t">${tot.map(c=>`<td>${c}</td>`).join("")}</tr>`:"");
+const th=a=>`<tr>${a.map(x=>`<th>${x}</th>`).join("")}</tr>`;
+let D=new Date();$("#dt").value=iso(D);$("#df").value=iso(new Date(D.getFullYear(),D.getMonth(),1));
+async function paged(q){let all=[],i=0;for(;;){const{data,error}=await q().range(i,i+999);if(error)throw error;all=all.concat(data);if(data.length<1000)break;i+=1000}return all}
+async function load(){
+ const{data:{session}}=await sb.auth.getSession();if(!session){location.href="index.html";return}
+ const f=$("#df").value,t=$("#dt").value,cols="workshop,capacity_kva,pr_date,issue_date,replacement_date,tx_return_date";
+ $("#msg").textContent="Loading…";
+ try{
+ const R=await paged(()=>sb.from("transformer_cases").select(cols).gte("pr_date",f).lte("pr_date",t).order("id"));
+ const TI=await paged(()=>sb.from("transformer_cases").select("workshop").eq("issue_date",t).order("id"));
+ const TR=await paged(()=>sb.from("transformer_cases").select("workshop").eq("replacement_date",t).order("id"));
+ $("#msg").textContent="";render(R,TI,TR,f,t)}catch(e){$("#msg").textContent="Error: "+e.message}}
+function render(R,TI,TR,f,t){
+ const days=Math.max(1,Math.round((new Date(t)-new Date(f))/864e5)+1);
+ $("#sub").textContent=`${fd(t)} · from ${fd(f)} to ${fd(t)}`;
+ const W=w=>R.filter(r=>r.workshop===w),P=r=>!r.issue_date,Q=r=>r.issue_date&&!r.replacement_date,X=r=>r.replacement_date&&!r.tx_return_date;
+ const s=WS.map(w=>{const a=W(w);return{w,tp:n(a,r=>r.pr_date===t),ia:n(a,r=>r.pr_date===t&&r.issue_date===t),ti:n(TI,r=>r.workshop===w),tr:n(TR,r=>r.workshop===w),pr:a.length,is:n(a,r=>r.issue_date),re:n(a,r=>r.replacement_date),rt:n(a,r=>r.tx_return_date),pi:n(a,P),pq:n(a,Q),px:n(a,X)}});
+ const T=k=>S(s.map(x=>x[k]));
+ $("#kp").innerHTML=[["","Total PR",T("pr"),"PR in period"],["g","Total Issue",T("is"),"issued"],["b","Total Replacement",T("re"),"replaced"],["o","Pending for Issue",T("pi"),"PRs waiting"],["y","Pending for Replacement",T("pq"),"PRs waiting"],["p","Pending for Return",T("px"),"old transformers"]].map(k=>`<div class="k ${k[0]}"><span>${k[1]}</span><b>${k[2]}</b><span>${k[3]}</span></div>`).join("");
+ $("#t1").innerHTML=th(["Workshop","Today PR","Issue vs today's PR","Today issue","Today replacement","Total PR","Total issue","Total replacement","Pending issue","Pending replacement"])+tb("",s.map(x=>[x.w,x.tp,x.ia,x.ti,x.tr,x.pr,x.is,x.re,x.pi,x.pq]),["TOTAL",T("tp"),T("ia"),T("ti"),T("tr"),T("pr"),T("is"),T("re"),T("pi"),T("pq")]);
+ const age=r=>(new Date(t)-new Date(r.pr_date))/864e5,B=[r=>age(r)<1,r=>age(r)>=1&&age(r)<2,r=>age(r)>=2&&age(r)<=4,r=>age(r)>4];
+ const ag=WS.map(w=>{const a=W(w).filter(P);return[w,...B.map(b=>n(a,b)),a.length]});
+ $("#t2").innerHTML=th(["Workshop","0-24 hour","1-2 days","2-4 days","More than 4 days","Total"])+tb("",ag,["TOTAL",...[1,2,3,4,5].map(i=>S(ag.map(r=>r[i])))]);
+ let h=th(["kVA",...WS.flatMap(w=>[`${w} issue`,`${w} repl.`,`${w} return`]),"PR received","Avg PR/day"]),rows=[];
+ CAP.forEach(c=>{const a=R.filter(r=>r.capacity_kva==c);rows.push([c,...WS.flatMap(w=>{const b=a.filter(r=>r.workshop===w);return[n(b,P),n(b,Q),n(b,X)]}),a.length,(a.length/days).toFixed(2)])});
+ $("#t3").innerHTML=h+rows.map(r=>`<tr>${r.map((c,i)=>`<td class="${i>0&&i<10&&c>0?"hot":""}">${c}</td>`).join("")}</tr>`).join("");
+ const pc=(a,b)=>b?Math.round(a*1000/b)/10:0,tot=T("pr"),ring=(v,col,l)=>`<div style="text-align:center"><div class="ring" style="--p:${v};--c:${col}"><div>${v}%</div></div><small style="color:#fff">${l}</small></div>`;
+ const bar=(d,p,x,col)=>`<div class="bar"><i style="width:${pc(d,tot2)}%;background:var(--g)"></i><i style="width:${pc(p,tot2)}%;background:${col}"></i></div>`;let tot2=tot;
+ const line=(l,d,p,col,tt)=>{tot2=tt;return`<div class="row"><b>${l}</b>${bar(d,p,0,col)}<span><b>${d}</b> done · <b>${p}</b> pending</span></div>`};
+ let v=`<div class="hero"><div><h1>Transformer Pendency Dashboard</h1><div>${fd(f)} to ${fd(t)} · ${WS.join(" · ")}</div></div><div class="rings">${ring(pc(T("is"),tot),"#7ef0c6","Issued")}${ring(pc(T("re"),tot),"#ffd166","Replaced")}</div></div>
+ <div class="kp">${[["b","Total PR",tot],["g","Issued",T("is")],["o","Pending to issue",T("pi")],["y","Replacement pending",T("pq")],["p","Return pending",T("px")]].map(k=>`<div class="k ${k[0]}"><span>${k[1]}</span><b>${k[2]}</b><span>${pc(k[2],tot)}% of Total PR</span></div>`).join("")}</div>
+ <div class="c"><h2>How far have the ${tot} PRs travelled</h2>${line("Issued",T("is"),T("pi"),"var(--o)",tot)}${line("Replaced",T("re"),T("pq"),"var(--y)",tot)}${line("Returned",T("rt"),T("px"),"var(--p)",tot)}</div><div class="wsg">`;
+ s.forEach(x=>{v+=`<div class="c"><h2>${x.w}</h2><b style="font-size:22px">${x.pr}</b> <small>Total PR</small>${line("Issued",x.is,x.pi,"var(--o)",x.pr)}${line("Replaced",x.re,x.pq,"var(--y)",x.pr)}${line("Returned",x.rt,x.px,"var(--p)",x.pr)}</div>`});
+ $("#v2").innerHTML=v+"</div>"}
+$("#go").onclick=load;
+[["n1","v1","v2"],["n2","v2","v1"]].forEach(([a,s,h])=>$("#"+a).onclick=()=>{$("#"+s).classList.remove("hide");$("#"+h).classList.add("hide");$("#n1").classList.toggle("on",a=="n1");$("#n2").classList.toggle("on",a=="n2")});
+load();
+</script></body></html>
