@@ -1,106 +1,135 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Transformer Tracking</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TF-Tracker – Data sheet</title>
 <style>
-:root{--bg:#f5f6f8;--card:#fff;--ink:#1b2430;--mute:#667085;--line:#e4e7ec;--brand:#0b5fa5;--brand-ink:#fff;
---ok:#16794c;--warn:#b54708;--bad:#b42318;--chip:#eef2f7}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--card:#171e28;--ink:#e6eaf0;--mute:#98a2b3;--line:#27313f;--brand:#4da3ee;--brand-ink:#08121d;--ok:#52c48a;--warn:#f5a259;--bad:#f27a70;--chip:#1f2935}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-header h1{font-size:16px;margin:0;flex:1 1 240px}
-nav{display:flex;gap:4px}nav button{background:none;border:0;padding:8px 14px;border-radius:8px;color:var(--mute);font:inherit;cursor:pointer}
-nav button.on{background:var(--chip);color:var(--ink);font-weight:600}
-main{padding:16px;max-width:1280px;margin:0 auto}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px}
-.card h2{font-size:14px;margin:0 0 10px;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.kpi b{display:block;font-size:26px;font-variant-numeric:tabular-nums}.kpi span{color:var(--mute);font-size:12px}
-.kpi.warn b{color:var(--warn)}.kpi.bad b{color:var(--bad)}.kpi.ok b{color:var(--ok)}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:12px}
-label{display:flex;flex-direction:column;font-size:12px;color:var(--mute);gap:3px}
-input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 9px;min-width:0}
-button.btn{font:inherit;background:var(--brand);color:var(--brand-ink);border:0;border-radius:8px;padding:8px 14px;cursor:pointer}
-button.btn.sec{background:var(--chip);color:var(--ink)}button.btn:disabled{opacity:.5}
-.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
-th,td{padding:7px 9px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-th:first-child,td:first-child,td.l,th.l{text-align:left}th{font-size:12px;color:var(--mute);font-weight:600;position:sticky;top:0;background:var(--card)}
-tr.tot td{font-weight:700;background:var(--chip)}tbody tr.click{cursor:pointer}tbody tr.click:hover{background:var(--chip)}
-.pill{display:inline-block;padding:2px 8px;border-radius:99px;background:var(--chip);font-size:12px}
-.neg{color:var(--bad);font-weight:600}
-#login{max-width:340px;margin:12vh auto;text-align:center}#login form{display:flex;flex-direction:column;gap:10px;text-align:left}
-.err{color:var(--bad);min-height:1.2em;font-size:13px}
-dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);padding:18px;width:min(760px,94vw);max-height:90vh;overflow:auto}
-dialog::backdrop{background:rgba(0,0,0,.45)}
-.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:12px 0}
-.fg h3{grid-column:1/-1;margin:8px 0 0;font-size:12px;color:var(--mute);text-transform:uppercase}
-.pager{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px;color:var(--mute)}
-canvas{max-height:280px}.hide{display:none!important}
-</style>
-</head>
-<body>
-<div id="login" class="card hide">
-  <h1 id="ltitle" style="font-size:18px"></h1>
-  <form id="lform">
-    <label>Email<input id="em" type="email" required autocomplete="username"></label>
-    <label>Password<input id="pw" type="password" required autocomplete="current-password"></label>
-    <button class="btn" type="submit">Sign in</button><div class="err" id="lerr"></div>
-  </form>
-</div>
-
-<div id="app" class="hide">
-<header>
-  <a href="index.html" class="btn sec" style="text-decoration:none">← Dashboard</a><h1 id="title"></h1>
-  <nav><button data-tab="ov" class="on">Overview</button><button data-tab="rec">Records</button></nav>
-  <input id="qs" placeholder="Search PR / complaint / any text" style="max-width:190px;padding:5px 8px;font-size:12px"><button class="btn sec" id="emgbtn" type="button">🚨 Emergency</button><span class="pill" id="who"></span><button class="btn sec" id="out">Sign out</button>
-</header>
-<div id="emgbar" class="hide" style="background:#c62828;color:#fff;padding:8px 14px;font-size:14px"></div>
+:root{--bg:#faf6f1;--card:#fff;--ink:#2b1d14;--mut:#7a6a5e;--ac:#c2410c;--ln:#e7dccf;--g:#1faa7a}
+@media(prefers-color-scheme:dark){:root{--bg:#14110f;--card:#1f1a17;--ink:#f3ebe3;--mut:#a89888;--ln:#3a312b}}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial;background:var(--bg);color:var(--ink)}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 18px;background:var(--card);border-bottom:1px solid var(--ln);position:sticky;top:0;z-index:5}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}.logo i{width:34px;height:34px;border:2px solid var(--ac);border-radius:50%;display:grid;place-items:center;font-style:normal;color:var(--ac);font-size:12px}
+nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap}nav a,nav span{padding:8px 12px;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:600;cursor:pointer;font-size:14px}nav a.on{background:#f1e4d8;color:var(--ac)}
+main{padding:16px;max-width:1400px;margin:0 auto}
+.c{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:14px}
+.c h2{margin:0 0 10px;font-size:13px;letter-spacing:.05em;color:var(--ac);text-transform:uppercase}
+.f{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.f label{font-size:11px;color:var(--mut);display:grid;gap:2px}
+input,select{padding:8px;border:1px solid var(--ln);border-radius:8px;background:var(--card);color:var(--ink);font-size:14px}
+button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 13px;font-weight:700;cursor:pointer;font-size:13px}
+button.s{background:transparent;color:var(--ac);border:1px solid var(--ac)}button.g{background:var(--g)}button.d{background:#c62828}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border:1px solid var(--ln);padding:5px 8px;text-align:center;white-space:nowrap}th{background:#f1e4d8;color:#2b1d14;font-size:11px}
+td.ac{display:flex;gap:5px;justify-content:center;border:0;border-top:1px solid var(--ln)}
+.tag{font-size:11px;padding:2px 8px;border-radius:9px;background:#ffe3d6;color:#2b1d14}.tag.ok{background:#dff5ec}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:30;padding:16px;overflow:auto}.hide{display:none!important}
+.ov>form{max-width:520px;margin:30px auto;display:grid;gap:10px}.ov label{font-size:12px;color:var(--mut);display:grid;gap:3px}
+.info{font-size:13px;background:#f1e4d8;color:#2b1d14;padding:8px 10px;border-radius:8px}
+small{color:var(--mut)}
+</style></head><body>
+<header><div class="logo"><i>TF</i>TF-Tracker</div>
+<nav><a href="index.html">📊 Summary</a><a class="on">🗂 Data sheet</a><span id="who"></span><a id="lo">Logout</a></nav></header>
 <main>
- <section id="t-ov">
-  <div class="card"><div class="row">
-    <label>PR from<input type="date" id="f_from"></label><label>PR to<input type="date" id="f_to"></label>
-    <button class="btn" id="f_go">Apply</button><button class="btn sec" id="f_all">All dates</button>
-  </div></div>
-  <div class="kpis" id="kpis"></div>
-  <div class="card"><h2>Workshop summary</h2><div class="tw"><table id="tbl_ws"></table></div></div>
-  <div class="grid2">
-    <div class="card"><h2>Pipeline stage</h2><canvas id="c_stage"></canvas></div>
-    <div class="card"><h2>PR received vs replaced – by month</h2><canvas id="c_month"></canvas></div>
-    <div class="card"><h2>Capacity-wise PR received</h2><div class="tw"><table id="tbl_cap"></table></div></div>
-    <div class="card"><h2>Top causes of damage</h2><canvas id="c_cause"></canvas></div>
-  </div>
-  <div class="card"><h2>Division summary</h2><div class="tw"><table id="tbl_div"></table></div></div>
- </section>
-
- <section id="t-rec" class="hide">
-  <div class="card">
-   <div class="row">
-    <label>Search<input id="q" placeholder="PR / DID / feeder / substation / place" style="min-width:260px"></label>
-    <label>Workshop<select id="r_ws"><option value="">All</option><option>AZAMGARH</option><option>MAU</option><option>BALLIA</option></select></label>
-    <label>Stage<select id="r_stage"><option value="">All</option></select></label>
-    <label>kVA<select id="r_cap"><option value="">All</option><option>10</option><option>16</option><option>25</option><option>63</option><option>100</option><option>160</option><option>250</option><option>400</option><option>630</option></select></label>
-    <label>PR from<input type="date" id="r_from"></label><label>PR to<input type="date" id="r_to"></label>
-    <button class="btn" id="r_go">Search</button>
-    <button class="btn sec" id="r_csv">Export CSV</button>
-    <button class="btn sec editonly hide" id="r_new">+ New PR</button>
-   </div>
-   <div class="tw"><table id="tbl_rec"></table></div>
-   <div class="pager"><span id="pinfo"></span><button class="btn sec" id="pp">‹ Prev</button><button class="btn sec" id="pn">Next ›</button></div>
-  </div>
- </section>
-</main>
+<div id="err" class="c hide" style="color:#c62828"></div>
+<div id="app" class="hide">
+<div class="c"><div class="f">
+<label>Date<input type="date" id="d"></label>
+<button class="s" id="prev">◀</button><button class="s" id="today">Today</button><button class="s" id="next">▶</button>
+<label id="wl">Workshop<select id="ws"></select></label>
+<label style="grid-auto-flow:column;align-items:center;gap:6px;font-size:13px;color:var(--ink)"><input type="checkbox" id="pend"> Also show all pending (not issued / replaced / returned)</label>
+<button id="add" class="g">＋ Add PR entry</button>
+</div></div>
+<div class="c"><h2 id="ttl">Entries</h2><div class="tw"><table id="tb"></table></div><p id="msg"><small></small></p></div>
+<div id="um" class="c hide"><h2>Users &amp; rights (admin only)</h2>
+<div class="tw"><table id="ut"></table></div>
+<form id="uf" class="f" style="margin-top:12px">
+<label>Email<input id="ue" type="email" required></label>
+<label>Password<input id="up" type="text" minlength="6" required></label>
+<label>Rights<select id="ur"><option value="je">JE / AE (own workshop)</option><option value="admin">Admin (all workshops)</option></select></label>
+<label>Workshop<select id="uw"></select></label>
+<button>Add user</button></form><small id="um2"></small></div>
 </div>
-
-<dialog id="dlg"><form method="dialog" id="dform"></form></dialog>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</main>
+<div id="fm" class="ov hide"><form id="ff" class="c"><h2 id="ft"></h2><div id="fi" class="info hide"></div><div id="ff2" style="display:grid;gap:10px"></div>
+<div class="f"><button>Save</button><button type="button" class="s" id="fc">Cancel</button></div></form></div>
 <script src="config.js"></script>
-<script src="app.js"></script>
-<script src="extras.js"></script>
-</body>
-</html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const C=window.APP_CONFIG,sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY),$=s=>document.querySelector(s);
+const WS=["AZAMGARH","BALLIA","MAU"],CAP=[10,16,25,63,100,160,250,400,630];
+/* Columns shown in the "Add PR entry" form. If your table has more columns that the JE must fill
+   (e.g. "pr_no","dt_no","village"), add their exact column names below. */
+const FIELDS=["workshop","capacity_kva","pr_date"];
+const STAGES=[["issue_date","Issue","issue"],["replacement_date","Replace","replace"],["tx_return_date","Return","return"]];
+const HIDDEN=["id","created_at","updated_at"];
+const ld=d=>{const z=new Date(d-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
+const fd=s=>s?s.split("-").reverse().join("."):"";
+const esc=v=>String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const lab=k=>k.replace(/_/g," ").toUpperCase();
+let me=null,rows=[],cols=[];
+$("#d").value=ld(new Date());
+function show(m){$("#err").textContent=m;$("#err").classList.remove("hide")}
+async function init(){
+ const{data:{session}}=await sb.auth.getSession();if(!session){location.href="index.html";return}
+ const{data:p,error}=await sb.from("profiles").select("*").eq("id",session.user.id).maybeSingle();
+ if(error){show("Error: "+error.message);return}
+ if(!p){show("You are signed in as "+session.user.email+" but have no access yet. Ask the admin to add you.");return}
+ me=p;me.email=session.user.email;
+ $("#who").textContent=`${me.email} · ${me.role==="admin"?"Admin":"JE/AE "+(me.workshop||"")}`;
+ $("#app").classList.remove("hide");
+ $("#ws").innerHTML=`<option value="">ALL</option>`+WS.map(w=>`<option>${w}</option>`).join("");
+ $("#uw").innerHTML=WS.map(w=>`<option>${w}</option>`).join("");
+ if(me.role!=="admin")$("#wl").classList.add("hide");else{$("#um").classList.remove("hide");loadUsers()}
+ load()}
+async function load(){
+ const d=$("#d").value;$("#msg").firstChild.textContent="Loading…";
+ let q=sb.from("transformer_cases").select("*").order("id").limit(1000);
+ q=$("#pend").checked?q.or(`pr_date.eq.${d},issue_date.is.null,replacement_date.is.null,tx_return_date.is.null`):q.eq("pr_date",d);
+ const w=me.role==="admin"?$("#ws").value:me.workshop;if(w)q=q.eq("workshop",w);
+ const{data,error}=await q;if(error){$("#msg").firstChild.textContent="Error: "+error.message;return}
+ rows=data;$("#msg").firstChild.textContent=rows.length?"":"No entries for this date.";render()}
+function render(){
+ const ks=[...new Set([...FIELDS,...rows.flatMap(r=>Object.keys(r))])].filter(k=>!HIDDEN.includes(k));
+ cols=ks;$("#ttl").textContent=`Entries – ${fd($("#d").value)}${$("#pend").checked?" + pending":""} (${rows.length})`;
+ $("#tb").innerHTML=`<tr><th>#</th>${ks.map(k=>`<th>${lab(k)}</th>`).join("")}<th>Status</th><th>Action</th></tr>`+
+ rows.map((r,i)=>{const nx=STAGES.find(s=>!r[s[0]]);
+  return`<tr><td>${i+1}</td>${ks.map(k=>`<td>${/_date$/.test(k)?fd(r[k]):esc(r[k])}</td>`).join("")}
+  <td>${nx?`<span class="tag">Pending ${nx[1].toLowerCase()}</span>`:`<span class="tag ok">Completed</span>`}</td>
+  <td class="ac">${nx?`<button class="g" onclick="stage(${i})">${nx[1]}</button>`:""}<button class="s" onclick="edit(${i})">Edit</button>${me.role==="admin"?`<button class="d" onclick="del(${i})">Del</button>`:""}</td></tr>`}).join("")}
+function field(k,v){
+ const dis=k==="workshop"&&me.role!=="admin"?"disabled":"";
+ if(k==="workshop")return`<label>${lab(k)}<select name="${k}" ${dis} required>${WS.map(w=>`<option ${w===(v||me.workshop)?"selected":""}>${w}</option>`).join("")}</select></label>`;
+ if(k==="capacity_kva")return`<label>${lab(k)}<select name="${k}" required><option value="">--</option>${CAP.map(c=>`<option ${c==v?"selected":""}>${c}</option>`).join("")}</select></label>`;
+ return`<label>${lab(k)}<input name="${k}" type="${/_date$/.test(k)?"date":"text"}" value="${esc(v)}"></label>`}
+function form(title,html,info,save){
+ $("#ft").textContent=title;$("#ff2").innerHTML=html;
+ $("#fi").classList.toggle("hide",!info);$("#fi").innerHTML=info||"";
+ $("#fm").classList.remove("hide");
+ $("#ff").onsubmit=async e=>{e.preventDefault();const o={};
+  new FormData($("#ff")).forEach((v,k)=>o[k]=v===""?null:v);
+  if(me.role!=="admin"&&"workshop" in o||$("#ff [name=workshop]")?.disabled)o.workshop=me.workshop;
+  if(o.capacity_kva)o.capacity_kva=Number(o.capacity_kva);
+  const{error}=await save(o);if(error){alert(error.message);return}
+  $("#fm").classList.add("hide");load()}}
+$("#fc").onclick=()=>$("#fm").classList.add("hide");
+$("#add").onclick=()=>form("Add PR entry",FIELDS.map(k=>field(k,k==="pr_date"?$("#d").value:k==="workshop"?(me.role==="admin"?$("#ws").value:me.workshop):"")).join(""),"",o=>sb.from("transformer_cases").insert(o));
+window.edit=i=>{const r=rows[i];form("Edit entry",cols.map(k=>field(k,r[k])).join(""),"",o=>sb.from("transformer_cases").update(o).eq("id",r.id))};
+window.del=async i=>{if(!confirm("Delete this entry?"))return;const{error}=await sb.from("transformer_cases").delete().eq("id",rows[i].id);if(error)alert(error.message);else load()};
+window.stage=i=>{const r=rows[i],s=STAGES.find(x=>!r[x[0]]),by=Object.keys(r).filter(k=>k.includes(s[2])&&k.endsWith("_by"));
+ const info=`<b>${s[1]} details (auto-filled)</b><br>Workshop: ${esc(r.workshop)} · Capacity: ${esc(r.capacity_kva)} kVA · PR date: ${fd(r.pr_date)}`+
+  cols.filter(k=>!FIELDS.includes(k)&&!/_date$/.test(k)&&!k.endsWith("_by")&&r[k]!=null).map(k=>` · ${lab(k)}: ${esc(r[k])}`).join("");
+ form(s[1]+" transformer",field(s[0],ld(new Date()))+by.map(k=>field(k,me.email)).join(""),info,o=>sb.from("transformer_cases").update(o).eq("id",r.id))};
+["d","ws","pend"].forEach(i=>$("#"+i).onchange=load);
+const mv=n=>{const x=new Date($("#d").value);x.setDate(x.getDate()+n);$("#d").value=ld(x);load()};
+$("#prev").onclick=()=>mv(-1);$("#next").onclick=()=>mv(1);$("#today").onclick=()=>{$("#d").value=ld(new Date());load()};
+$("#lo").onclick=async()=>{await sb.auth.signOut();location.href="index.html"};
+/* ---- Users (admin) ---- */
+async function loadUsers(){
+ const{data,error}=await sb.from("profiles").select("*").order("email");if(error){$("#um2").textContent=error.message;return}
+ $("#ut").innerHTML=`<tr><th>Email</th><th>Rights</th><th>Workshop</th><th>Action</th></tr>`+data.map(u=>`<tr><td>${esc(u.email)}</td><td>${u.role==="admin"?"Admin":"JE/AE"}</td><td>${esc(u.workshop||"ALL")}</td><td class="ac"><button class="d" onclick="rmUser('${u.id}')">Remove access</button></td></tr>`).join("")}
+window.rmUser=async id=>{if(!confirm("Remove this user's access?"))return;const{error}=await sb.from("profiles").delete().eq("id",id);if(error)alert(error.message);else loadUsers()};
+$("#uf").onsubmit=async e=>{e.preventDefault();$("#um2").textContent="Creating…";
+ const sb2=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY,{auth:{persistSession:false,autoRefreshToken:false,storageKey:"tf-temp"}});
+ const em=$("#ue").value.trim(),{data,error}=await sb2.auth.signUp({email:em,password:$("#up").value});
+ if(error){$("#um2").textContent="Error: "+error.message;return}
+ const role=$("#ur").value,{error:e2}=await sb.from("profiles").upsert({id:data.user.id,email:em,role,workshop:role==="admin"?null:$("#uw").value});
+ if(e2){$("#um2").textContent="Error: "+e2.message;return}
+ $("#um2").textContent="User added. Share the email and password with them.";$("#uf").reset();loadUsers()};
+init();
+</script></body></html>
