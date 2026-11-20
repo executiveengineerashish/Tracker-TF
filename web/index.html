@@ -56,8 +56,9 @@ canvas{max-height:280px}.hide{display:none!important}
 <header>
   <h1 id="title"></h1>
   <nav><button data-tab="ov" class="on">Overview</button><button data-tab="rec">Records</button></nav>
-  <span class="pill" id="who"></span><button class="btn sec" id="out">Sign out</button>
+  <input id="qs" placeholder="Search PR / complaint / any text" style="max-width:190px;padding:5px 8px;font-size:12px"><button class="btn sec" id="emgbtn" type="button">🚨 Emergency</button><span class="pill" id="who"></span><button class="btn sec" id="out">Sign out</button>
 </header>
+<div id="emgbar" class="hide" style="background:#c62828;color:#fff;padding:8px 14px;font-size:14px"></div>
 <main>
  <section id="t-ov">
   <div class="card"><div class="row">
@@ -100,5 +101,6 @@ canvas{max-height:280px}.hide{display:none!important}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="config.js"></script>
 <script src="app.js"></script>
+<script src="extras.js"></script>
 </body>
 </html>
